@@ -107,7 +107,10 @@ export async function buildHtml(manual: ManualInput, baseDir: string): Promise<s
   const body: string[] = []
   for (const [i, s] of manual.sections.entries()) {
     const lead = s.screenshot ? await imgTag(s.screenshot, baseDir) : ''
-    body.push(`<section><div class="chip">Chapter ${i + 1}</div>${lead}${mdBody(s.markdown)}</section>`)
+    // Skip the auto "Chapter N" chip when the title already labels itself
+    // (Part / Lesson / Chapter / Module / Appendix …) to avoid redundancy/mismatch.
+    const chip = /^(part|lesson|chapter|module|appendix|unit)\b/i.test(s.title) ? '' : `<div class="chip">Section ${i + 1}</div>`
+    body.push(`<section>${chip}${lead}${mdBody(s.markdown)}</section>`)
   }
   const html = `<!doctype html><html><head><meta charset="utf-8"><style>${CSS}</style></head><body>
   <section class="cover">
