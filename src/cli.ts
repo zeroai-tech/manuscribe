@@ -10,7 +10,7 @@ const program = new Command()
 program
   .name('manuscribe')
   .description('Turn your running web app into a PDF user manual. Claude Code does the writing (no API key); manuscribe crawls, screenshots, crops close-ups and renders.')
-  .version('0.5.0')
+  .version('0.6.0')
 
 // Step 1 — capture (mechanical, no AI)
 program
@@ -37,13 +37,16 @@ program
 // Step 2 — render (mechanical, no AI). The agent writes manual.json in between.
 program
   .command('render')
-  .description('Render the manual the agent wrote (manual.json) into a PDF')
+  .description('Render the manual the agent wrote (manual.json) into a PDF or PNG')
   .argument('<manual.json>', 'path to the manual definition written by the agent')
-  .option('-o, --out <file>', 'output PDF path', 'manual.pdf')
+  .option('-o, --out <file>', 'output path', 'manual.pdf')
+  .option('-f, --format <fmt>', 'output format: pdf | png', 'pdf')
+  .option('-s, --scale <n>', 'quality scale for PNG (1-4, higher = crisper print)', '2')
   .option('-b, --base-dir <dir>', 'base dir for screenshot paths (usually the crawl out-dir)')
-  .action(async (manual: string, o: { out: string; baseDir?: string }) => {
+  .action(async (manual: string, o: { out: string; format: string; scale: string; baseDir?: string }) => {
     try {
-      await runRender(resolve(manual), resolve(o.out), o.baseDir)
+      const format = o.format === 'png' ? 'png' : 'pdf'
+      await runRender(resolve(manual), resolve(o.out), { format, scale: parseInt(o.scale, 10) || 2, baseDir: o.baseDir })
     } catch (e) { log.err((e as Error).message); process.exit(1) }
   })
 
