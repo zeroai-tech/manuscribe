@@ -1,0 +1,32 @@
+{
+  "name": "manuscribe",
+  "version": "0.1.0",
+  "description": "Point it at your running web app and it generates a polished PDF user manual — UX, UI, data flow and screenshots — written by Claude.",
+  "type": "module",
+  "license": "MIT",
+  "author": "ZeroAI (Lottie Mukuka)",
+  "homepage": "https://github.com/Lottie128/manuscribe",
+  "repository": { "type": "git", "url": "https://github.com/Lottie128/manuscribe.git" },
+  "keywords": ["documentation", "user-manual", "claude", "anthropic", "playwright", "pdf", "ux", "screenshots", "cli", "ai"],
+  "bin": { "manuscribe": "./dist/cli.js" },
+  "files": ["dist", "skills", "README.md", "CHANGELOG.md", "LICENSE"],
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "start": "node dist/cli.js",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.71.0",
+    "commander": "^12.1.0",
+    "marked": "^14.1.0",
+    "playwright": "^1.48.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
